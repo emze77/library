@@ -36,11 +36,12 @@ function fillShelf () {
         }
 
         let entryLastName = document.createElement("span");
-        entryLastName.classList.add("bold");
+        entryLastName.classList.add("bold", "entry-text");
         entryLastName.textContent = item.authorLastName + ": ";
         entry.appendChild(entryLastName);
 
         let entryTitle = document.createElement("span");
+        entryLastName.classList.add("entry-text");
         entryTitle.textContent = item.title;
         entry.appendChild(entryTitle);
     })
@@ -71,8 +72,6 @@ addBookToLibrary("Vier lustige Gesellen", "Ludwig",  "Hirsch", 1975, true);
 addBookToLibrary("Zeiten des Umbruchs", "Ferdinand",  "Gans", 1870, false);
 
 fillShelf();
-
-console.log(myLibrary);
 
 
 

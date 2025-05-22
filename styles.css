@@ -41,10 +41,41 @@ h2 {
 
   & ul {
     list-style: none;
-    padding-left: 15px;
+    padding: 0;
 
-    & li {
-      margin: 3px 0;
+
+    & .entry {
+      position: relative;
+      margin: 0px;
+      padding: 3px 25px;
+
+      /* &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(13, 14, 29, 0.185);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 0;
+      } */
+
+      
+
+      &:hover {
+        background-color: rgba(13, 14, 29, 0.185);
+        transform: scale(1.1);
+        transition-duration: 1.5s;
+        transition-property: transform;
+        cursor: pointer;
+      }
+
+      &:hover + li,
+      &:has( + li:hover) {
+        transform: scale(1.03);
+        transition-duration: 1.5s;
+        /* transform-origin: 20px-size; */
+
+      }
     }
   }
 
@@ -64,8 +95,4 @@ h2 {
 
 .bold {
   font-weight: 600;
-}
-
-li:hover {
-	background-color: rgba(13, 14, 29, 0.185);
 }
