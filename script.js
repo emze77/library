@@ -11,10 +11,6 @@ let currentTitle = document.querySelector("#currentTitle");
 let currentDate = document.querySelector("#currentDate");
 let currentSetting = document.querySelector("#currentSetting");
 
-// const promptField = {
-
-// };
-
 
 // ____ARCHIVE____
 addBookToLibrary("Der Hobbit", "J.R.R.", "Tolkien", 1956, true);
@@ -46,7 +42,7 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
     currentAuthor.textContent = this.authorFirstName + " " + this.authorLastName;
     currentTitle.textContent = this.title;
     currentDate.textContent = this.date;
-    currentBook.classList.remove("tempGif");
+    currentBook.classList.remove("placeholderGif");
   };
 }
 
