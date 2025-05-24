@@ -4,14 +4,16 @@ const myLibrary = [];
 const readBooks = document.querySelector(".readBooks");
 const unreadBooks = document.querySelector(".unreadBooks");
 const prompter = document.querySelector(".currentBook");
-const liEntry = document.querySelectorAll("li");
 
-const promptField = {
-  currentAuthor: document.querySelector("#currentAuthor"),
-  currentTitle: document.querySelector("#currentTitle"),
-  currentDate: document.querySelector("#currentDate"),
-  currentSetting: document.querySelector("#currentSetting"),
-};
+let currentAuthor = document.querySelector("#currentAuthor");
+let currentTitle = document.querySelector("#currentTitle");
+let currentDate = document.querySelector("#currentDate");
+let currentSetting = document.querySelector("#currentSetting");
+
+// const promptField = {
+
+// };
+
 
 // ____ARCHIVE____
 addBookToLibrary("Der Hobbit", "J.R.R.", "Tolkien", 1956, true);
@@ -39,11 +41,10 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
   this.id = id;
   this.prompt = function () {
     // bring current Book to the prompter
-    promptField.currentAuthor.textContent(
-      this.authorFirstName + " " + this.authorLastName
-    );
-    promptField.currentTitle.textContent(this.title);
-    promptField.currentDate.textContent(this.date);
+    console.log("prompt activated! " + this.authorFirstName);
+    currentAuthor.textContent = this.authorFirstName + " " + this.authorLastName;
+    currentTitle.textContent = this.title;
+    currentDate.textContent = this.date;
   };
 }
 
@@ -75,6 +76,11 @@ function fillShelf() {
   mySortedLibrary.forEach((item) => {
     let entry = document.createElement("li");
     entry.setAttribute("id", item.id);
+
+    entry.addEventListener("click", function (e) {
+        console.log("works + " + item.id);
+        item.prompt();
+    })
     entry.classList.add("entry");
     if (item.readStatus) {
       readBooks.appendChild(entry);
@@ -98,8 +104,6 @@ function fillShelf() {
   });
 }
 
-
-
 // sort library in alphabetic order by authors last name.
 function sortLibrary() {
   return myLibrary.sort((a, b) => {
@@ -116,13 +120,7 @@ function sortLibrary() {
 function deleteBookfromLibrary(id) {
   //
 }
-
-// bring selection to prompter section
-// liEntry.addEventListener("click", (item) => )
-
-
 fillShelf();
 
-// ARCHIVE
 console.log(myLibrary);
 
