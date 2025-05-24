@@ -3,14 +3,14 @@
 const myLibrary = [];
 const readBooks = document.querySelector(".readBooks");
 const unreadBooks = document.querySelector(".unreadBooks");
-const prompter = document.querySelector(".currentBook");
 
-let currentBook = document.querySelector(".currentBook")
+let currentBook = document.querySelector("#currentBook")
 let currentAuthor = document.querySelector("#currentAuthor");
 let currentTitle = document.querySelector("#currentTitle");
 let currentDate = document.querySelector("#currentDate");
 let currentSetting = document.querySelector("#currentSettings");
 let readCheckbox = document.querySelector("#readCheckbox");
+let idOfPromptedBook
 
 
 
@@ -40,11 +40,11 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
   this.id = id;
   this.prompt = function () {
     // bring current Book to the prompter
-    console.log("prompt activated! " + this.authorFirstName);
     currentAuthor.textContent = this.authorFirstName + " " + this.authorLastName;
     currentTitle.textContent = this.title;
     currentDate.textContent = this.date;
     currentSetting.classList.remove("invisible"); //show "delete + read"
+    idOfPromptedBook = this.id; //need to change read status + delete
     readCheckbox.checked = this.readStatus;
     currentBook.classList.remove("placeholderGif"); //disable placeholder-animation
   };
@@ -72,8 +72,8 @@ function addBookToLibrary(
 }
 
 function fillShelf() {
+  clearShelf();
   let mySortedLibrary = sortLibrary();
-
   // add authors last name and book title as list items to DOM
   mySortedLibrary.forEach((item) => {
     let entry = document.createElement("li");
@@ -105,6 +105,28 @@ function fillShelf() {
     entrytext.appendChild(entryTitle);
   });
 }
+
+function clearShelf() {
+  while (readBooks.hasChildNodes()) {
+    readBooks.removeChild(readBooks.firstChild);
+  }
+  while (unreadBooks.hasChildNodes()) {
+    unreadBooks.removeChild(unreadBooks.firstChild);
+  }
+}
+
+readCheckbox.addEventListener("click", function() {
+  myLibrary.forEach(item => {
+    if (item.id === idOfPromptedBook) {
+      item.readStatus = readCheckbox.checked;
+    }
+  })
+  fillShelf()
+})
+
+
+
+// ____HELPERS____
 
 // sort library in alphabetic order by authors last name.
 function sortLibrary() {

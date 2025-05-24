@@ -115,7 +115,7 @@ h2 {
     background-blend-mode: difference;
   }
 
-  & .currentBook {
+  & #currentBook {
     grid-area: content;
     border: var(--reg-border) solid var(--black);
     padding: 30px;
