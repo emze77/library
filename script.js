@@ -5,6 +5,7 @@ const readBooks = document.querySelector(".readBooks");
 const unreadBooks = document.querySelector(".unreadBooks");
 const prompter = document.querySelector(".currentBook");
 
+let currentBook = document.querySelector(".currentBook")
 let currentAuthor = document.querySelector("#currentAuthor");
 let currentTitle = document.querySelector("#currentTitle");
 let currentDate = document.querySelector("#currentDate");
@@ -45,6 +46,7 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
     currentAuthor.textContent = this.authorFirstName + " " + this.authorLastName;
     currentTitle.textContent = this.title;
     currentDate.textContent = this.date;
+    currentBook.classList.remove("tempGif");
   };
 }
 

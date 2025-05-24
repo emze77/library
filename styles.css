@@ -1,6 +1,7 @@
 :root {
   --reg-pad: 15px;
   --black: rgb(37, 39, 6);
+  --background: rgb(253, 253, 203);
   --serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
   --sans-serif: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro,
     sans-serif;
@@ -12,7 +13,7 @@
 }
 
 body {
-  background-color: rgb(253, 253, 203);
+  background-color: var(--background) ;
 
   display: grid;
   grid-template-rows: 1fr 8fr;
@@ -79,7 +80,22 @@ h2 {
   grid-template-areas:
     ". . ."
     ". content ."
-    ". . .";
+    ". attribution .";
+
+    & .tempGif {
+      grid-area: content;
+      border: 5px solid var(--black);
+      padding: 30px;
+      background-color: var(--background);
+      background-image: url(./assets/wifflegif-plslices-tunnel.gif);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position-x: center;
+      background-blend-mode: difference;
+      
+      box-shadow: inset 0 0 50px 20px var(--black);
+
+    }
 
     & .currentBook {
       grid-area: content;
@@ -87,9 +103,10 @@ h2 {
       padding: 30px;
 
       display: grid;
-      grid-template-rows: 2fr 3fr 1fr 2fr;
+      grid-template-rows: 1.5fr 1fr 1fr 2fr;
       grid-template-areas: "promptAuthor" "promptTitle" "promptYear" "promptOptions";
       justify-items: center;
+      text-align: center;
 
       & #currentAuthor {
         font-size: 1.5rem;
@@ -99,6 +116,17 @@ h2 {
 
       & #currentTitle {
         font-size: 2rem;
+        /* font-family: var(--serif); */
+        justify-self: center;
+      }
+
+      & #currentSettings {
+        font-size: 1.3rem;
+        align-self: last baseline;
+        width: 100%;
+
+        display: flex;
+        justify-content: space-between;
       }
     }
 }
