@@ -9,7 +9,9 @@ let currentBook = document.querySelector(".currentBook")
 let currentAuthor = document.querySelector("#currentAuthor");
 let currentTitle = document.querySelector("#currentTitle");
 let currentDate = document.querySelector("#currentDate");
-let currentSetting = document.querySelector("#currentSetting");
+let currentSetting = document.querySelector("#currentSettings");
+let readCheckbox = document.querySelector("#readCheckbox");
+
 
 
 // ____ARCHIVE____
@@ -42,7 +44,9 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
     currentAuthor.textContent = this.authorFirstName + " " + this.authorLastName;
     currentTitle.textContent = this.title;
     currentDate.textContent = this.date;
-    currentBook.classList.remove("placeholderGif");
+    currentSetting.classList.remove("invisible"); //show "delete + read"
+    readCheckbox.checked = this.readStatus;
+    currentBook.classList.remove("placeholderGif"); //disable placeholder-animation
   };
 }
 

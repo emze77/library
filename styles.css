@@ -142,9 +142,15 @@ h2 {
       font-size: 1.3rem;
       align-self: last baseline;
       width: 100%;
+      margin: 0;
 
       display: flex;
       justify-content: space-between;
+      align-items: last baseline;
+
+      & #read, #delete {
+        margin: 0;
+      }
     }
   }
 
@@ -157,4 +163,53 @@ h2 {
 
 .bold {
   font-weight: 600;
+}
+
+
+/* Checkbox-Setting by MDN: https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Advanced_form_styling*/
+input[type="checkbox"] {
+  appearance: none;
+  margin: 0;
+  position: relative;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid var(--black);
+  /* Adjusts the position of the checkboxes on the text baseline */
+  vertical-align: -2px;
+  /* Set here so that Windows' High-Contrast Mode can override */
+  color: var(--black);
+}
+
+input[type="checkbox"]::before {
+  content: "✔";
+  position: absolute;
+  font-size: 1.3rem;
+  right: -3px;
+  top: -0.2em;
+  visibility: hidden;
+}
+
+input[type="checkbox"]:checked::before {
+  /* Use `visibility` instead of `display` to avoid recalculating layout */
+  visibility: visible;
+}
+
+input[type="checkbox"]:disabled {
+  border-color: black;
+  background: #ddd;
+  color: gray;
+}
+
+
+/* 
+#readCheckbox {
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 5px solid var(--black);
+} */
+
+
+.invisible {
+  visibility: hidden;
 }
