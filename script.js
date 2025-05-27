@@ -14,6 +14,8 @@ const modes = {
   empty: document.querySelector("#empty"),
 };
 
+
+
 let currentBook = document.querySelector("#currentBook");
 let currentAuthor = document.querySelector("#currentAuthor");
 let currentTitle = document.querySelector("#currentTitle");
@@ -48,8 +50,6 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
     currentDate.textContent = this.date;
     idOfPromptedBook = this.id; //need to change read status + delete
     readCheckbox.checked = this.readStatus;
-    // currentSetting.classList.remove("invisible"); //show "delete + read"
-    // currentBook.classList.remove("placeholderGif"); //disable placeholder-animation
   };
 }
 
@@ -76,18 +76,23 @@ const formInput = {
   inputTitle: document.querySelector("#inputTitle"),
   inputDate: document.querySelector("#inputDate"),
   addBook: function () {
-    addBookToLibrary(
+    let uuid = addBookToLibrary( //returns new UUID
       this.inputTitle.value,
       this.inputFirstName.value,
       this.inputLastName.value,
-      this.inputDate.value,
+      this.inputDate.value
     );
-  },
-};
+    promptBookByUuid(uuid);
+    }
+  }
 
-newBookButton.addEventListener("click", function () {
-  modeSelector("formInput");
-}, false);
+newBookButton.addEventListener(
+  "click",
+  function () {
+    modeSelector("formInput");
+  },
+  false
+);
 
 submitButton.addEventListener(
   "click",
@@ -96,6 +101,13 @@ submitButton.addEventListener(
     formInput.addBook();
     inputForm.reset();
     fillShelf();
+
+    myLibrary.forEach((item) => {
+      if (item.id === idOfPromptedBook) {
+        item.readStatus = readCheckbox.checked;
+      }
+    });
+
     modeSelector("showBook");
   },
   false
@@ -124,6 +136,7 @@ function addBookToLibrary(
     uuid
   );
   myLibrary.push(newBook);
+  return uuid;
 }
 
 function fillShelf() {
@@ -138,7 +151,7 @@ function fillShelf() {
       console.log("works + " + item.id);
       item.prompt();
     });
-    
+
     entry.classList.add("entry");
     if (item.readStatus) {
       readBooks.appendChild(entry);
@@ -172,9 +185,6 @@ function clearShelf() {
   }
 }
 
-// ____CLICK-EVENT-LISTENERS
-
-// Add Book
 
 // "Read?" -Checkbox works
 readCheckbox.addEventListener("click", function () {
@@ -199,6 +209,16 @@ function sortLibrary() {
       return 0;
     }
   });
+}
+
+
+// iterates for uuid and brings the content to _current book_
+function promptBookByUuid (uuid) {
+  myLibrary.forEach((item) => {
+    if (item.id === uuid) {
+      item.prompt();
+    }
+  })
 }
 
 function deleteBookfromLibrary(id) {
