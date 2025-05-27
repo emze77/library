@@ -140,15 +140,20 @@ h2 {
 }
 
 #formOverlay {
-  visibility: visible;
+  visibility: hidden;
 
   grid-area: content;
   z-index: 2;
   background-color: var(--background);
   border: var(--reg-border) solid var(--black);
   padding: var(--reg-pad);
-
   text-align: center;
+
+  &.visible {
+    visibility: visible;
+  }
+
+
   & form {
     display: flex;
     flex-direction: column;
@@ -202,7 +207,7 @@ button {
     margin: 60px auto;
 }
 
-#formAddButton {
+#formSubmitButton {
       width: 30%;
       padding: 5px 20px;
       font-size: 1rem;

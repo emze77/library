@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#"> <!--prevent missing favicon error browser-console-->
     <link rel="stylesheet" href="styles.css">
     <title>Odin Library</title>
 </head>
@@ -18,8 +19,8 @@
         <button id="newBookButton"></button>
     </div>
         <div class="prompter">
-            <div id="formOverlay" class="activateForm">
-                <form method="post" action="https://httpbin.org">
+            <div id="formOverlay" class="visible"> <!--class: visible to show-->
+                <form id="inputForm" method="post" action="https://httpbin.org">
                     <h2>Add new book</h2>
                     <div class="formContainer" id="containerFirstName">
                         <label for="inputFirstName">author first name(s)</label>
@@ -37,11 +38,7 @@
                         <label for="inputDate">Year of publication</label>
                         <input type="number" id="inputDate" name="inputDate" placeholder="1956" min="-1000" max="2030">
                     </div>
-                    <div class="formContainer" id="inputReadStatus">
-                        <label for="inputReadStatus">Read?</label>
-                        <input type="checkbox" id="inputReadStatus" name="inputReadStatus">
-                    </div>
-                    <button id="formAddButton" type="button">Add</button>
+                    <button id="formSubmitButton" type="submit">Add</button>
                 </form>
             </div>
             <div id ="currentBook" class=""> <!-- placeholderGif comes here!-->
@@ -56,7 +53,8 @@
                     </span>
                 </div>
             </div>
-            <div class="attribution">Attribution: plsslices</div>
+            <div id="empty" class=""></div>
+            <div class="attribution"></div><!--Attribution: plsslices-->
         </div>
     <footer>
 

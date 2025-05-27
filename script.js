@@ -3,7 +3,14 @@
 const myLibrary = [];
 const readBooks = document.querySelector(".readBooks");
 const unreadBooks = document.querySelector(".unreadBooks");
-const addButton = document.querySelector("#formAddButton");
+const submitButton = document.querySelector("#formSubmitButton");
+const inputForm = document.querySelector("#inputForm");
+
+const modes = {
+  formOverlay: document.querySelector("#formOverlay"),
+  currentBook: document.querySelector("#currentBook"),
+  empty: document.querySelector("#empty"),
+};
 
 let currentBook = document.querySelector("#currentBook");
 let currentAuthor = document.querySelector("#currentAuthor");
@@ -13,37 +20,10 @@ let currentSetting = document.querySelector("#currentSettings");
 let readCheckbox = document.querySelector("#readCheckbox");
 let idOfPromptedBook;
 
-const formInput = {
-  inputFirstName: document.querySelector("#inputFirstName"),
-  inputLastName: document.querySelector("#inputLastName"),
-  inputTitle: document.querySelector("#inputTitle"),
-  inputDate: document.querySelector("#inputDate"),
-  readStatus: document.querySelector("#inputReadStatus"),
-  addBook: function () {
-    addBookToLibrary(
-      this.inputTitle,
-      this.inputFirstName,
-      this.inputLastName,
-      this.inputDate,
-      this.readStatus
-    );
-    // fillShelf();
-    // modeSelector();
-  },
-};
-
-// addButton.addEventListener("click", formInput.addBook());
-
 // ____ARCHIVE____
 addBookToLibrary("Film als subversive Kunst", "Amos", "Vogel", 1997, true);
 addBookToLibrary("Kapitalismus aufheben", "Stefan", "Meretz", 2018, false);
-addBookToLibrary(
-  "Understanding Institutional Diversity",
-  "Elinor",
-  "Ostrom",
-  2001,
-  true
-);
+addBookToLibrary("Governing the Commons", "Elinor", "Ostrom", 1996, true);
 addBookToLibrary("Lohn, Preis und Profit", "Karl", "Marx", 1846, false);
 addBookToLibrary("Die Linke im Baskenland", "Raul", "Zelik", 2019, true);
 addBookToLibrary("Engels neu entdecken", "Elmar", "Altvater", 2010, false);
@@ -69,6 +49,54 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
     currentBook.classList.remove("placeholderGif"); //disable placeholder-animation
   };
 }
+
+// ___SWITCH PROMPTER MODE___
+
+function modeSelector(mode) {
+  Object.keys(modes).forEach((item) => modes[item].classList.remove("visible")); // hide every prompt-mode
+  if (mode === "formInput") {
+    modes.formOverlay.classList.add("visible");
+  } else if (mode === "showBook") {
+    modes.currentBook.classList.add("visible");
+  } else if (mode === "empty") {
+    modes.empty.classList.add("visible");
+  } else {
+    throw new Error("unvalid prompter mode: " + mode);
+  }
+}
+
+// ____PROMPTER MODE: FORM INPUT_______
+
+const formInput = {
+  inputFirstName: document.querySelector("#inputFirstName"),
+  inputLastName: document.querySelector("#inputLastName"),
+  inputTitle: document.querySelector("#inputTitle"),
+  inputDate: document.querySelector("#inputDate"),
+  addBook: function () {
+    addBookToLibrary(
+      this.inputTitle.value,
+      this.inputFirstName.value,
+      this.inputLastName.value,
+      this.inputDate.value,
+    );
+  },
+};
+
+submitButton.addEventListener(
+  "click",
+  function (event) {
+    event.preventDefault(); // prevent sending data to server
+    formInput.addBook();
+    inputForm.reset();
+    fillShelf();
+    modeSelector("showBook");
+  },
+  false
+);
+
+// _____PROMPTER MODE: EMPTY_____
+
+// _____PROMTER MODE: SHOW BOOK_____
 
 // ___FUNCTIONS____
 
@@ -103,6 +131,7 @@ function fillShelf() {
       console.log("works + " + item.id);
       item.prompt();
     });
+    
     entry.classList.add("entry");
     if (item.readStatus) {
       readBooks.appendChild(entry);
