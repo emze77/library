@@ -75,7 +75,8 @@ h2 {
     ". content ."
     ". attribution .";
 
-  & .placeholderGif {
+  & #empty {
+    visibility: hidden;
     grid-area: content;
     border: 5px solid var(--black);
     padding: 30px;
@@ -85,9 +86,15 @@ h2 {
     background-size: cover;
     background-position-x: center;
     background-blend-mode: difference;
+
+    &.visible {
+      visibility: visible;
+    }
   }
 
   & #currentBook {
+    visibility: hidden;
+
     grid-area: content;
     border: var(--reg-border) solid var(--black);
     padding: 30px;
@@ -97,6 +104,10 @@ h2 {
     grid-template-areas: "promptAuthor" "promptTitle" "promptYear" "promptOptions";
     justify-items: center;
     text-align: center;
+
+    &.visible {
+      visibility: visible;
+    }
 
     & #currentAuthor {
       font-size: 1.5rem;

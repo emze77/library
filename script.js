@@ -3,6 +3,8 @@
 const myLibrary = [];
 const readBooks = document.querySelector(".readBooks");
 const unreadBooks = document.querySelector(".unreadBooks");
+
+const newBookButton = document.querySelector("#newBookButton");
 const submitButton = document.querySelector("#formSubmitButton");
 const inputForm = document.querySelector("#inputForm");
 
@@ -39,14 +41,15 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
   this.id = id;
   this.prompt = function () {
     // bring current Book to the prompter
+    modeSelector("showBook");
     currentAuthor.textContent =
       this.authorFirstName + " " + this.authorLastName;
     currentTitle.textContent = this.title;
     currentDate.textContent = this.date;
-    currentSetting.classList.remove("invisible"); //show "delete + read"
     idOfPromptedBook = this.id; //need to change read status + delete
     readCheckbox.checked = this.readStatus;
-    currentBook.classList.remove("placeholderGif"); //disable placeholder-animation
+    // currentSetting.classList.remove("invisible"); //show "delete + read"
+    // currentBook.classList.remove("placeholderGif"); //disable placeholder-animation
   };
 }
 
@@ -65,7 +68,7 @@ function modeSelector(mode) {
   }
 }
 
-// ____PROMPTER MODE: FORM INPUT_______
+// ____FORM INPUT_______
 
 const formInput = {
   inputFirstName: document.querySelector("#inputFirstName"),
@@ -81,6 +84,10 @@ const formInput = {
     );
   },
 };
+
+newBookButton.addEventListener("click", function () {
+  modeSelector("formInput");
+}, false);
 
 submitButton.addEventListener(
   "click",
@@ -127,7 +134,7 @@ function fillShelf() {
     let entry = document.createElement("li");
     entry.setAttribute("id", item.id);
 
-    entry.addEventListener("click", function (e) {
+    entry.addEventListener("click", function () {
       console.log("works + " + item.id);
       item.prompt();
     });
