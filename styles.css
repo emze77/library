@@ -8,6 +8,7 @@
   --sans-serif: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro,
     sans-serif;
   --transition-time: 0.75s;
+  --loop: url(./assets/wifflegif-plslices-tunnel.gif);
 
   color: var(--black);
   font-family: var(--sans-serif);
@@ -27,6 +28,7 @@ h1 {
   padding-left: 15px;
   font-size: 2.3rem;
   font-family: var(--serif);
+  cursor: pointer;
 }
 
 h2 {
@@ -81,7 +83,7 @@ h2 {
     border: 5px solid var(--black);
     padding: 30px;
     background-color: var(--background);
-    background-image: url(./assets/wifflegif-plslices-tunnel.gif);
+    background-image: var(--loop);
     background-repeat: no-repeat;
     background-size: cover;
     background-position-x: center;
@@ -98,7 +100,7 @@ h2 {
     grid-area: content;
     border: var(--reg-border) solid var(--black);
     padding: 30px;
-
+    background-color: var(--background);
     display: grid;
     grid-template-rows: 1.5fr 1fr 1fr 2fr;
     grid-template-areas: "promptAuthor" "promptTitle" "promptYear" "promptOptions";
@@ -150,6 +152,21 @@ h2 {
   }
 }
 
+#backgroundLoop {
+  visibility: hidden;
+  grid-area: 1 / 1 /  4 / 4;
+  background-color: var(--background);
+  background-image: var(--loop);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: center;
+  background-blend-mode: difference;
+
+  &.visible {
+    visibility: visible;
+  }
+}
+
 #formOverlay {
   visibility: hidden;
 
@@ -163,7 +180,6 @@ h2 {
   &.visible {
     visibility: visible;
   }
-
 
   & form {
     display: flex;

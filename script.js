@@ -4,25 +4,9 @@ const myLibrary = [];
 const readBooks = document.querySelector(".readBooks");
 const unreadBooks = document.querySelector(".unreadBooks");
 
-const newBookButton = document.querySelector("#newBookButton");
-const submitButton = document.querySelector("#formSubmitButton");
 const inputForm = document.querySelector("#inputForm");
-
-const modes = {
-  formOverlay: document.querySelector("#formOverlay"),
-  currentBook: document.querySelector("#currentBook"),
-  empty: document.querySelector("#empty"),
-};
-
-
-
-let currentBook = document.querySelector("#currentBook");
-let currentAuthor = document.querySelector("#currentAuthor");
-let currentTitle = document.querySelector("#currentTitle");
-let currentDate = document.querySelector("#currentDate");
-let currentSetting = document.querySelector("#currentSettings");
-let readCheckbox = document.querySelector("#readCheckbox");
-let idOfPromptedBook;
+const prompter = document.querySelector("#prompter");
+const h1 = document.querySelector("h1");
 
 // ____ARCHIVE____
 addBookToLibrary("Film als subversive Kunst", "Amos", "Vogel", 1997, true);
@@ -34,6 +18,16 @@ addBookToLibrary("Engels neu entdecken", "Elmar", "Altvater", 2010, false);
 
 // ___CONSTRUCTOR____
 
+const current = {
+  book: document.querySelector("#currentBook"),
+  author: document.querySelector("#currentAuthor"),
+  title: document.querySelector("#currentTitle"),
+  date: document.querySelector("#currentDate"),
+  setting: document.querySelector("#currentSettings"),
+  readCheckbox: document.querySelector("#readCheckbox"),
+  id: null,
+};
+
 function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
   this.title = title;
   this.authorFirstName = authorFirstName;
@@ -44,25 +38,33 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
   this.prompt = function () {
     // bring current Book to the prompter
     modeSelector("showBook");
-    currentAuthor.textContent =
+    current["author"].textContent =
       this.authorFirstName + " " + this.authorLastName;
-    currentTitle.textContent = this.title;
-    currentDate.textContent = this.date;
-    idOfPromptedBook = this.id; //need to change read status + delete
-    readCheckbox.checked = this.readStatus;
+    current["title"].textContent = this.title;
+    current["date"].textContent = this.date;
+    current["readCheckbox"].checked = this.readStatus;
+    current["id"] = this.id; //need to change read status + delete
   };
 }
 
 // ___SWITCH PROMPTER MODE___
 
+const modes = {
+  formOverlay: document.querySelector("#formOverlay"),
+  currentBook: document.querySelector("#currentBook"),
+  empty: document.querySelector("#empty"),
+  backgroundLoop: document.querySelector("#backgroundLoop"),
+};
+
 function modeSelector(mode) {
   Object.keys(modes).forEach((item) => modes[item].classList.remove("visible")); // hide every prompt-mode
   if (mode === "formInput") {
-    modes.formOverlay.classList.add("visible");
+    modes["formOverlay"].classList.add("visible");
+    modes["backgroundLoop"].classList.add("visible");
   } else if (mode === "showBook") {
-    modes.currentBook.classList.add("visible");
+    modes["currentBook"].classList.add("visible");
   } else if (mode === "empty") {
-    modes.empty.classList.add("visible");
+    modes["empty"].classList.add("visible");
   } else {
     throw new Error("unvalid prompter mode: " + mode);
   }
@@ -76,17 +78,25 @@ const formInput = {
   inputTitle: document.querySelector("#inputTitle"),
   inputDate: document.querySelector("#inputDate"),
   addBook: function () {
-    let uuid = addBookToLibrary( //returns new UUID
+    let uuid = addBookToLibrary(
+      //returns new UUID
       this.inputTitle.value,
       this.inputFirstName.value,
       this.inputLastName.value,
       this.inputDate.value
     );
     promptBookByUuid(uuid);
-    }
-  }
+  },
+};
 
-newBookButton.addEventListener(
+// ___BUTTONS___
+
+const buttons = {
+  newBook: document.querySelector("#newBookButton"),
+  submit: document.querySelector("#formSubmitButton"),
+};
+
+buttons["newBook"].addEventListener(
   "click",
   function () {
     modeSelector("formInput");
@@ -94,16 +104,17 @@ newBookButton.addEventListener(
   false
 );
 
-submitButton.addEventListener(
+buttons["submit"].addEventListener(
   "click",
   function (event) {
     event.preventDefault(); // prevent sending data to server
+    formValidation();
     formInput.addBook();
     inputForm.reset();
     fillShelf();
 
     myLibrary.forEach((item) => {
-      if (item.id === idOfPromptedBook) {
+      if (item.id === current["id"]) {
         item.readStatus = readCheckbox.checked;
       }
     });
@@ -113,11 +124,30 @@ submitButton.addEventListener(
   false
 );
 
-// _____PROMPTER MODE: EMPTY_____
+// ____CLICK ON H1 & OUTSIDE PROMPTER-CONTENT-AREA LEADS TO "EMPTY"-MODE_____
 
-// _____PROMTER MODE: SHOW BOOK_____
+modes["currentBook"].addEventListener("click", (event) =>
+  handlePrompterClick(event, "inside")
+);
+modes["formOverlay"].addEventListener("click", (event) =>
+  handlePrompterClick(event, "inside")
+);
+h1.addEventListener("click", (event) => handlePrompterClick(event, "outside"));
+prompter.addEventListener("click", (event) =>
+  handlePrompterClick(event, "outside")
+);
 
-// ___FUNCTIONS____
+function handlePrompterClick(event, area) {
+  if (area === "inside") {
+    console.log("inside clicked");
+    event.stopPropagation();
+  } else if (area === "outside") {
+    console.log("outside clicked");
+    modeSelector("empty");
+  }
+}
+
+// ___CASUAL FUNCTIONS____
 
 function addBookToLibrary(
   title,
@@ -144,35 +174,47 @@ function fillShelf() {
   let mySortedLibrary = sortLibrary();
   // add authors last name and book title as list items to DOM
   mySortedLibrary.forEach((item) => {
-    let entry = document.createElement("li");
-    entry.setAttribute("id", item.id);
-
-    entry.addEventListener("click", function () {
-      console.log("works + " + item.id);
-      item.prompt();
-    });
-
-    entry.classList.add("entry");
-    if (item.readStatus) {
-      readBooks.appendChild(entry);
-    } else {
-      unreadBooks.appendChild(entry);
-    }
-
-    // create text-span; seperate authore and title
-    let entrytext = document.createElement("span");
-    entrytext.classList.add("entrytext");
-    entry.appendChild(entrytext);
-
-    let entryLastName = document.createElement("span");
-    entryLastName.classList.add("bold");
-    entryLastName.textContent = item.authorLastName + ": ";
-    entrytext.appendChild(entryLastName);
-
-    let entryTitle = document.createElement("span");
-    entryTitle.textContent = item.title;
-    entrytext.appendChild(entryTitle);
+    let entry = createClickableListEntry(item);
+    sortAccordingReadStatus(item, entry);
+    apendEntrysInDOM(item, entry);
   });
+}
+
+function createClickableListEntry(item) {
+  let entry = document.createElement("li");
+  entry.setAttribute("id", item.id);
+  entry.classList.add("entry");
+
+  entry.addEventListener("click", function () {
+    console.log("works + " + item.id);
+    item.prompt();
+  });
+
+  return entry;
+}
+
+function sortAccordingReadStatus(item, entry) {
+  if (item.readStatus) {
+    readBooks.appendChild(entry);
+  } else {
+    unreadBooks.appendChild(entry);
+  }
+}
+
+function apendEntrysInDOM(item, entry) {
+  // create text-span; seperate author and title
+  let entrytext = document.createElement("span");
+  entrytext.classList.add("entrytext");
+  entry.appendChild(entrytext);
+
+  let entryLastName = document.createElement("span");
+  entryLastName.classList.add("bold");
+  entryLastName.textContent = item.authorLastName + ": ";
+  entrytext.appendChild(entryLastName);
+
+  let entryTitle = document.createElement("span");
+  entryTitle.textContent = item.title;
+  entrytext.appendChild(entryTitle);
 }
 
 //Shelf gets cleared before refilling
@@ -185,11 +227,10 @@ function clearShelf() {
   }
 }
 
-
 // "Read?" -Checkbox works
 readCheckbox.addEventListener("click", function () {
   myLibrary.forEach((item) => {
-    if (item.id === idOfPromptedBook) {
+    if (item.id === current["id"]) {
       item.readStatus = readCheckbox.checked;
     }
   });
@@ -211,19 +252,19 @@ function sortLibrary() {
   });
 }
 
-
 // iterates for uuid and brings the content to _current book_
-function promptBookByUuid (uuid) {
+function promptBookByUuid(uuid) {
   myLibrary.forEach((item) => {
     if (item.id === uuid) {
       item.prompt();
     }
-  })
+  });
 }
 
 function deleteBookfromLibrary(id) {
   //
 }
+
 fillShelf();
 
 console.log(myLibrary);
