@@ -17,7 +17,6 @@
 
 body {
   background-color: var(--background);
-
   display: grid;
   grid-template-rows: 1fr 8fr;
   grid-template-columns: minmax(300px, 1fr) 3fr;
@@ -54,6 +53,7 @@ h2 {
       margin: 0px;
       padding: 3px 25px;
       transition: transform var(--transition-time) ease-in-out;
+      font-size: calc(1rem * 1.2);
       transform: scale(0.9);
 
       &:hover {
@@ -70,12 +70,71 @@ h2 {
   border: 5px solid var(--black);
 
   display: grid;
-  grid-template-rows: 1fr 6fr 1fr;
-  grid-template-columns: 2fr minmax(300px, 6fr) 2fr;
+  grid-template-rows: 1fr minmax(6fr, 500px) 1fr;
+  grid-template-columns: 2fr minmax(360px, 600px) 2fr;
   grid-template-areas:
     ". . ."
     ". content ."
     ". attribution .";
+
+  & #backgroundLoop {
+    visibility: hidden;
+    grid-area: 1 / 1 / 4 / 4;
+    background-color: var(--background);
+    background-image: var(--loop);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-x: center;
+    background-blend-mode: difference;
+
+    &.visible {
+      visibility: visible;
+    }
+  }
+
+  & #formOverlay {
+    visibility: hidden;
+
+    grid-area: content;
+    z-index: 2;
+    background-color: var(--background);
+    border: var(--reg-border) solid var(--black);
+    padding: var(--reg-pad);
+    text-align: center;
+
+    &.visible {
+      visibility: visible;
+    }
+
+    & form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      & h2 {
+        padding-left: 0;
+      }
+
+      & .formContainer {
+        padding: var(--reg-pad);
+        display: flex;
+        flex-direction: column;
+      }
+
+      & input {
+        width: max(80px, 60%);
+        align-self: center;
+        display: block;
+        background-color: transparent;
+        height: 1.2rem;
+        margin-top: 10px;
+        font-family: var(--sans-serif);
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+    }
+  }
 
   & #empty {
     visibility: hidden;
@@ -88,6 +147,7 @@ h2 {
     background-size: cover;
     background-position-x: center;
     background-blend-mode: difference;
+    z-index: 2;
 
     &.visible {
       visibility: visible;
@@ -103,7 +163,6 @@ h2 {
     background-color: var(--background);
     display: grid;
     grid-template-rows: 1.5fr 1fr 1fr 2fr;
-    grid-template-areas: "promptAuthor" "promptTitle" "promptYear" "promptOptions";
     justify-items: center;
     text-align: center;
 
@@ -119,7 +178,6 @@ h2 {
 
     & #currentTitle {
       font-size: 2rem;
-      /* font-family: var(--serif); */
       justify-self: center;
     }
 
@@ -138,74 +196,22 @@ h2 {
         margin: 0;
       }
 
-      & #delete:hover {
+      & #delete:hover,
+      #read:hover {
         cursor: pointer;
         font-weight: 600;
       }
     }
   }
 
-  & .attribution {
+  & #attribution {
+    visibility: hidden;
     grid-area: attribution;
     padding: var(--reg-pad);
     font-size: 0.6rem;
-  }
-}
 
-#backgroundLoop {
-  visibility: hidden;
-  grid-area: 1 / 1 /  4 / 4;
-  background-color: var(--background);
-  background-image: var(--loop);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position-x: center;
-  background-blend-mode: difference;
-
-  &.visible {
-    visibility: visible;
-  }
-}
-
-#formOverlay {
-  visibility: hidden;
-
-  grid-area: content;
-  z-index: 2;
-  background-color: var(--background);
-  border: var(--reg-border) solid var(--black);
-  padding: var(--reg-pad);
-  text-align: center;
-
-  &.visible {
-    visibility: visible;
-  }
-
-  & form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    & h2 {
-      padding-left: 0;
-    }
-
-    & .formContainer {
-      padding: var(--reg-pad);
-      display: flex;
-      flex-direction: column;
-
-    }
-  
-    & input {
-      display:block;
-      background-color: transparent;
-      height: 1.2rem;
-      margin-top: 10px;
-      font-family: var(--sans-serif);
-      text-align: center;
-      font-size: 1rem;
-      font-weight: 600;
+    &.visible {
+      visibility: visible;
     }
   }
 }
@@ -227,27 +233,31 @@ button {
 }
 
 #newBookButton {
-    background-image: url(./assets/icons/noun-plus-7539246.svg);
-    width: 50px;
-    height: 50px;
-    background-size: cover;
-    margin: 60px auto;
+  background-image: url(./assets/icons/noun-plus-7539246.svg);
+  width: 50px;
+  height: 50px;
+  background-size: cover;
+  margin: 60px auto;
 }
 
 #formSubmitButton {
-      width: 30%;
-      padding: 5px 20px;
-      font-size: 1rem;
-      font-family: var(--sans-serif);
-      align-self: center;
-      margin-top: var(--reg-pad);
-      border: 3px solid var(--black)
+  width: 30%;
+  padding: 5px 20px;
+  font-size: 1rem;
+  font-family: var(--sans-serif);
+  align-self: center;
+  margin-top: var(--reg-pad);
+  border: 3px solid var(--black);
 }
-
 
 .bold {
   font-weight: 600;
 }
+
+.redBorder {
+  border: 3px solid rgb(226, 121, 35);
+}
+
 
 /* Checkbox-Setting by MDN: https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Advanced_form_styling*/
 input[type="checkbox"] {
@@ -286,16 +296,4 @@ input[type="checkbox"]:disabled {
   border-color: black;
   background: #ddd;
   color: gray;
-}
-
-/* 
-#readCheckbox {
-  width: 20px;
-  height: 20px;
-  background-color: transparent;
-  border: 5px solid var(--black);
-} */
-
-.invisible {
-  visibility: hidden;
 }
