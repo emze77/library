@@ -18,7 +18,7 @@ const buttons = {
   read: document.querySelector("#read"),
 };
 
-const current = {
+const activeBook = {
   book: document.querySelector("#currentBook"),
   author: document.querySelector("#currentAuthor"),
   title: document.querySelector("#currentTitle"),
@@ -58,12 +58,12 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
   this.prompt = function () {
     // bring current Book to the prompter
     modeSelector("showBook");
-    current["author"].textContent =
+    activeBook["author"].textContent =
       this.authorFirstName + " " + this.authorLastName;
-    current["title"].textContent = this.title;
-    current["date"].textContent = yearAppendix(this.date);
-    current["readCheckbox"].checked = this.readStatus;
-    current["id"] = this.id; //need to change read status + delete
+    activeBook["title"].textContent = this.title;
+    activeBook["date"].textContent = yearAppendix(this.date);
+    activeBook["readCheckbox"].checked = this.readStatus;
+    activeBook["id"] = this.id; //need to change read status + delete
   };
 }
 
@@ -100,16 +100,16 @@ buttons["newBook"].addEventListener("click", function () {
 });
 
 const formInput = {
-  inputFirstName: document.querySelector("#inputFirstName"),
-  inputLastName: document.querySelector("#inputLastName"),
-  inputTitle: document.querySelector("#inputTitle"),
-  inputDate: document.querySelector("#inputDate"),
+  firstName: document.querySelector("#inputFirstName"),
+  lastName: document.querySelector("#inputLastName"),
+  title: document.querySelector("#inputTitle"),
+  date: document.querySelector("#inputDate"),
   addBook: function () {
     addBookToLibrary(
-      this.inputTitle.value,
-      this.inputFirstName.value,
-      this.inputLastName.value,
-      this.inputDate.value
+      this.title.value,
+      this.firstName.value,
+      this.lastName.value,
+      this.date.value
     );
   },
 };
@@ -118,7 +118,7 @@ buttons["submit"].addEventListener("click", function (event) {
   event.preventDefault(); // prevent sending data to server
   if (formValidation()) {
     formInput.addBook();
-    promptBookByUuid(current["id"]);
+    showBookById(activeBook["id"]);
     inputForm.reset();
     fillShelf();
     modeSelector("showBook");
@@ -128,23 +128,23 @@ buttons["submit"].addEventListener("click", function (event) {
 
 // cannot use regular validation as default is prevented. 
 function formValidation() {
-  console.log("form input: " + typeof formInput["inputLastName"].value);
+  console.log("form input: " + typeof formInput["lastName"].value);
   if (
-    formInput["inputLastName"].value == "" ||
-    formInput["inputTitle"].value == ""
+    formInput["lastName"].value == "" ||
+    formInput["title"].value == ""
   ) {
-    formInput["inputLastName"].classList.add("redBorder");
-    formInput["inputTitle"].classList.add("redBorder");
+    formInput["lastName"].classList.add("redBorder");
+    formInput["title"].classList.add("redBorder");
     return false;
   } else {
-    formInput["inputLastName"].classList.remove("redBorder");
-    formInput["inputTitle"].classList.remove("redBorder");
+    formInput["lastName"].classList.remove("redBorder");
+    formInput["title"].classList.remove("redBorder");
     return true;
   }
 }
 
 // iterates for uuid and brings the content to current-book
-function promptBookByUuid(uuid) {
+function showBookById(uuid) {
   myLibrary.forEach((item) => {
     if (item.id === uuid) {
       item.prompt();
@@ -172,14 +172,14 @@ function addBookToLibrary(
     uuid
   );
   myLibrary.push(newBook);
-  current["id"] = uuid;
+  activeBook["id"] = uuid;
 }
 
-buttons["delete"].addEventListener("click", deleteBookfromLibrary);
+buttons["delete"].addEventListener("click", deleteBookFromLibrary);
 
-function deleteBookfromLibrary() {
+function deleteBookFromLibrary() {
   myLibrary.forEach((item, index) => {
-    if (item.id === current["id"]) {
+    if (item.id === activeBook["id"]) {
       myLibrary.splice(index, 1);
     }
   });
@@ -214,8 +214,8 @@ function fillShelf() {
   clearShelf();
   let mySortedLibrary = sortLibrary();
   mySortedLibrary.forEach((item) => {
-    let entry = createClickableListEntry(item);
-    seperateEntrysAccordingReadStatus(item, entry);
+    let entry = createListItem(item);
+    separateEntriesAccordingToReadStatus(item, entry);
     appendEntriesInDOM(item, entry);
   });
 }
@@ -241,7 +241,7 @@ function sortLibrary() {
   });
 }
 
-function createClickableListEntry(item) {
+function createListItem(item) {
   let entry = document.createElement("li");
   entry.setAttribute("id", item.id);
   entry.classList.add("entry");
@@ -252,7 +252,7 @@ function createClickableListEntry(item) {
   return entry;
 }
 
-function seperateEntrysAccordingReadStatus(item, entry) {
+function separateEntriesAccordingToReadStatus(item, entry) {
   if (item.readStatus) {
     readBooks.appendChild(entry);
   } else {
@@ -280,7 +280,7 @@ function appendEntriesInDOM(item, entry) {
 
 buttons["read"].addEventListener("click", () => {
   myLibrary.forEach((item) => {
-    if (item.id === current["id"]) {
+    if (item.id === activeBook["id"]) {
       item.toggleRead();
     }
   });
@@ -294,7 +294,7 @@ Book.prototype.toggleRead = function () {
 
 function refreshCheckbox () {
   myLibrary.forEach((item) => {
-    if (item.id === current["id"]) {
+    if (item.id === activeBook["id"]) {
       readCheckbox.checked = item.readStatus;
     }
   });
@@ -306,7 +306,7 @@ readCheckbox.addEventListener("click", setCheckbox);
 
 function setCheckbox () {
   myLibrary.forEach((item) => {
-    if (item.id === current["id"]) {
+    if (item.id === activeBook["id"]) {
       item.readStatus = readCheckbox.checked;
     }
   });
