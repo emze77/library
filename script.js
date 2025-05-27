@@ -3,19 +3,39 @@
 const myLibrary = [];
 const readBooks = document.querySelector(".readBooks");
 const unreadBooks = document.querySelector(".unreadBooks");
+const addButton = document.querySelector("#formAddButton");
 
-let currentBook = document.querySelector("#currentBook")
+let currentBook = document.querySelector("#currentBook");
 let currentAuthor = document.querySelector("#currentAuthor");
 let currentTitle = document.querySelector("#currentTitle");
 let currentDate = document.querySelector("#currentDate");
 let currentSetting = document.querySelector("#currentSettings");
 let readCheckbox = document.querySelector("#readCheckbox");
-let idOfPromptedBook
+let idOfPromptedBook;
 
+const formInput = {
+  inputFirstName: document.querySelector("#inputFirstName"),
+  inputLastName: document.querySelector("#inputLastName"),
+  inputTitle: document.querySelector("#inputTitle"),
+  inputDate: document.querySelector("#inputDate"),
+  readStatus: document.querySelector("#inputReadStatus"),
+  addBook: function () {
+    addBookToLibrary(
+      this.inputTitle,
+      this.inputFirstName,
+      this.inputLastName,
+      this.inputDate,
+      this.readStatus
+    );
+    // fillShelf();
+    // modeSelector();
+  },
+};
 
+// addButton.addEventListener("click", formInput.addBook());
 
 // ____ARCHIVE____
-addBookToLibrary("Der Hobbit", "J.R.R.", "Tolkien", 1956, true);
+addBookToLibrary("Film als subversive Kunst", "Amos", "Vogel", 1997, true);
 addBookToLibrary("Kapitalismus aufheben", "Stefan", "Meretz", 2018, false);
 addBookToLibrary(
   "Understanding Institutional Diversity",
@@ -25,9 +45,8 @@ addBookToLibrary(
   true
 );
 addBookToLibrary("Lohn, Preis und Profit", "Karl", "Marx", 1846, false);
-addBookToLibrary("Vier lustige Gesellen", "Ludwig", "Hirsch", 1975, true);
-addBookToLibrary("Zeiten des Umbruchs", "Ferdinand", "Gans", 1870, false);
-
+addBookToLibrary("Die Linke im Baskenland", "Raul", "Zelik", 2019, true);
+addBookToLibrary("Engels neu entdecken", "Elmar", "Altvater", 2010, false);
 
 // ___CONSTRUCTOR____
 
@@ -40,7 +59,8 @@ function Book(title, authorFirstName, authorLastName, date, readStatus, id) {
   this.id = id;
   this.prompt = function () {
     // bring current Book to the prompter
-    currentAuthor.textContent = this.authorFirstName + " " + this.authorLastName;
+    currentAuthor.textContent =
+      this.authorFirstName + " " + this.authorLastName;
     currentTitle.textContent = this.title;
     currentDate.textContent = this.date;
     currentSetting.classList.remove("invisible"); //show "delete + read"
@@ -80,9 +100,9 @@ function fillShelf() {
     entry.setAttribute("id", item.id);
 
     entry.addEventListener("click", function (e) {
-        console.log("works + " + item.id);
-        item.prompt();
-    })
+      console.log("works + " + item.id);
+      item.prompt();
+    });
     entry.classList.add("entry");
     if (item.readStatus) {
       readBooks.appendChild(entry);
@@ -106,6 +126,7 @@ function fillShelf() {
   });
 }
 
+//Shelf gets cleared before refilling
 function clearShelf() {
   while (readBooks.hasChildNodes()) {
     readBooks.removeChild(readBooks.firstChild);
@@ -115,16 +136,19 @@ function clearShelf() {
   }
 }
 
-readCheckbox.addEventListener("click", function() {
-  myLibrary.forEach(item => {
+// ____CLICK-EVENT-LISTENERS
+
+// Add Book
+
+// "Read?" -Checkbox works
+readCheckbox.addEventListener("click", function () {
+  myLibrary.forEach((item) => {
     if (item.id === idOfPromptedBook) {
       item.readStatus = readCheckbox.checked;
     }
-  })
-  fillShelf()
-})
-
-
+  });
+  fillShelf();
+});
 
 // ____HELPERS____
 
@@ -147,4 +171,3 @@ function deleteBookfromLibrary(id) {
 fillShelf();
 
 console.log(myLibrary);
-

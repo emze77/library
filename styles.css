@@ -14,11 +14,6 @@
   font-size: 20px;
 }
 
-/* html{
-  height: 100vh;
-  width: 100vw;
-} */
-
 body {
   background-color: var(--background);
 
@@ -57,36 +52,13 @@ h2 {
       margin: 0px;
       padding: 3px 25px;
       transition: transform var(--transition-time) ease-in-out;
+      transform: scale(0.9);
 
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1);
+        background-color: rgb(196, 194, 181);
         cursor: pointer;
       }
-
-      &:hover + li,
-      &:has(+ li:hover) {
-        transform: scale(1.02);
-      }
-    }
-  }
-
-  & button {
-    display: block;
-    border: 0;
-    background: transparent;
-    background-image: url(./assets/icons/noun-plus-7539246.svg);
-    width: 50px;
-    height: 50px;
-    background-size: cover;
-    margin: 60px auto;
-    border-radius: 25px;
-
-    &:hover {
-      background-color: var(--background-dark);
-    }
-
-    &:active {
-      background-color: var(--black);
     }
   }
 }
@@ -148,8 +120,14 @@ h2 {
       justify-content: space-between;
       align-items: last baseline;
 
-      & #read, #delete {
+      & #read,
+      #delete {
         margin: 0;
+      }
+
+      & #delete:hover {
+        cursor: pointer;
+        font-weight: 600;
       }
     }
   }
@@ -161,16 +139,90 @@ h2 {
   }
 }
 
+#formOverlay {
+  visibility: visible;
+
+  grid-area: content;
+  z-index: 2;
+  background-color: var(--background);
+  border: var(--reg-border) solid var(--black);
+  padding: var(--reg-pad);
+
+  text-align: center;
+  & form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    & h2 {
+      padding-left: 0;
+    }
+
+    & .formContainer {
+      padding: var(--reg-pad);
+      display: flex;
+      flex-direction: column;
+
+    }
+  
+    & input {
+      display:block;
+      background-color: transparent;
+      height: 1.2rem;
+      margin-top: 10px;
+      font-family: var(--sans-serif);
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+button {
+  display: block;
+  border: 0;
+  background: transparent;
+  border-radius: 25px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--background-dark);
+  }
+
+  &:active {
+    background-color: var(--black);
+  }
+}
+
+#newBookButton {
+    background-image: url(./assets/icons/noun-plus-7539246.svg);
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    margin: 60px auto;
+}
+
+#formAddButton {
+      width: 30%;
+      padding: 5px 20px;
+      font-size: 1rem;
+      font-family: var(--sans-serif);
+      align-self: center;
+      margin-top: var(--reg-pad);
+      border: 3px solid var(--black)
+}
+
+
 .bold {
   font-weight: 600;
 }
-
 
 /* Checkbox-Setting by MDN: https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Advanced_form_styling*/
 input[type="checkbox"] {
   appearance: none;
   margin: 0;
   position: relative;
+  cursor: pointer;
   width: 1.2rem;
   height: 1.2rem;
   border: 2px solid var(--black);
@@ -178,6 +230,10 @@ input[type="checkbox"] {
   vertical-align: -2px;
   /* Set here so that Windows' High-Contrast Mode can override */
   color: var(--black);
+
+  &:hover {
+    border: 3px solid var(--black);
+  }
 }
 
 input[type="checkbox"]::before {
@@ -200,7 +256,6 @@ input[type="checkbox"]:disabled {
   color: gray;
 }
 
-
 /* 
 #readCheckbox {
   width: 20px;
@@ -208,7 +263,6 @@ input[type="checkbox"]:disabled {
   background-color: transparent;
   border: 5px solid var(--black);
 } */
-
 
 .invisible {
   visibility: hidden;
