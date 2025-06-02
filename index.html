@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#" />
+    <!--prevent missing favicon error browser-console-->
+    <link rel="stylesheet" href="styles.css" />
+    <title>Odin Library</title>
+  </head>
+  <body>
+    <div class="nav">
+      <h1>The Odin Library</h1>
+    </div>
+    <div class="shelf">
+      <h2>read</h2>
+      <ul class="readBooks"></ul>
+      <h2>unread</h2>
+      <ul class="unreadBooks"></ul>
+      <button id="newBookButton"></button>
+    </div>
+    <div id="prompter" class="prompter">
+      <div id="backgroundLoop" class=""></div>
+      <!--class: visible to show-->
+      <div id="formOverlay" class="">
+        <!--class: visible to show-->
+        <form id="inputForm" method="post" action="https://httpbin.org">
+          <h2>Add new book</h2>
+          <div class="formContainer" id="containerFirstName">
+            <label for="inputFirstName">author first name(s)</label>
+            <input
+              type="text"
+              name="inputFirstName"
+              id="inputFirstName"
+              placeholder="J.R.R."
+            />
+          </div>
+          <div class="formContainer" id="containerLastName">
+            <label for="inputLastName">author last name*</label>
+            <input
+              type="text"
+              name="inputLastName"
+              id="inputLastName"
+              placeholder="Tolkien"
+              required
+            />
+          </div>
+          <div class="formContainer" id="containerTitle">
+            <label for="inputTitle">book title*</label>
+            <input
+              type="text"
+              name="inputTitle"
+              id="inputTitle"
+              placeholder="The Hobbit"
+              required
+            />
+          </div>
+          <div class="formContainer" id="containerPublicationDate">
+            <label for="inputDate">Year of publication</label>
+            <input
+              type="number"
+              id="inputDate"
+              name="inputDate"
+              placeholder="1996"
+              min="-1000"
+              max="2030"
+            />
+          </div>
+          <button id="formSubmitButton" type="submit">Add</button>
+        </form>
+      </div>
+      <div id="currentBook" class="">
+        <!--class: visible to show-->
+        <div id="currentAuthor"></div>
+        <div id="currentTitle"></div>
+        <div id="currentDate"></div>
+        <div id="currentSettings" class="">
+          <span id="delete">Delete</span>
+          <span>
+            <span id="read">Read?</span>
+            <input type="checkbox" id="readCheckbox" />
+            <!--class=invisible!-->
+          </span>
+        </div>
+      </div>
+      <div id="empty" class="visible"></div>
+      <!--class: visible to show-->
+      <div id="attribution" class="">Gif by <a href="https://pi-slices.tumblr.com/" target="_blank">pi-slices</a></div>
+      <!--Attribution: plsslices-->
+    </div>
+    <footer></footer>
+  </body>
 
+  <script src="script.js"></script>
+</html>
